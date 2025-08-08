@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { ThemeService } from './core/services/theme.service';
 
 @Component({
   selector: 'app-root',
@@ -7,4 +8,9 @@ import { Component } from '@angular/core';
 })
 export class AppComponent {
   title = 'multi-chat-frontend';
+  constructor(private themeService: ThemeService) {}
+
+  toggleTheme(): void {
+    this.themeService.toggleTheme();
+  }
 }
