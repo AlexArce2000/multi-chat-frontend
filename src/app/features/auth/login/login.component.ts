@@ -45,19 +45,20 @@ export class LoginComponent implements OnInit {
       return;
     }
 
-    // Llamaremos al método login() del servicio, que crearemos a continuación
     this.authService.login(this.loginForm.value).subscribe({
       next: (response) => {
         console.log('Login exitoso:', response);
-        // Aquí guardaremos el token JWT
-        
-        // Y luego redirigiremos al usuario al chat
-        // this.router.navigate(['/chat']); // <-- Lo haremos en el siguiente paso
       },
       error: (err) => {
         console.error('Error en el login:', err);
-        // Aquí mostraríamos un snackbar con "Credenciales incorrectas"
       }
     });
+
+
+    this.authService.login(this.loginForm.value).subscribe({
+      next: (response) => {
+        this.router.navigate(['/chat']);
+      },
+    });    
   }
 }

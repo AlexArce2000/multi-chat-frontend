@@ -8,12 +8,14 @@ import { LoginComponent } from './features/auth/login/login.component';
 import { RegisterComponent } from './features/auth/register/register.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MaterialModule } from './shared/material/material.module';
+import { ChatLobbyComponent } from './features/chat/chat-lobby/chat-lobby.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     LoginComponent,
-    RegisterComponent
+    RegisterComponent,
+    ChatLobbyComponent
   ],
   imports: [
     BrowserModule,
