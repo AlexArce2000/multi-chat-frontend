@@ -47,6 +47,14 @@
  */
 import 'zone.js';  // Included with Angular CLI.
 
+(window as any).global = window;
+(window as any).process = {
+  env: { DEBUG: undefined },
+};
+/*
+*   `(window as any).global = window;`: Esta línea crea la variable `global` que `sockjs-client` está buscando y la hace apuntar al objeto `window` del navegador.
+*   La segunda parte (`process`) soluciona otro error común que a menudo aparece justo después de arreglar el de `global`.
+*/
 
 /***************************************************************************************************
  * APPLICATION IMPORTS
