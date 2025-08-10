@@ -1,5 +1,5 @@
-import { Injectable, Renderer2, RendererFactory2 } from '@angular/core';
-
+import { Injectable, Renderer2, RendererFactory2, Inject, PLATFORM_ID } from '@angular/core';
+import { DOCUMENT } from '@angular/common';
 @Injectable({
   providedIn: 'root'
 })
@@ -7,7 +7,9 @@ export class ThemeService {
   private renderer: Renderer2;
   private isDarkTheme = false;
 
-  constructor(rendererFactory: RendererFactory2) {
+  constructor(rendererFactory: RendererFactory2,
+    @Inject(DOCUMENT) private document: Document
+  ) {
     this.renderer = rendererFactory.createRenderer(null, null);
     this.loadTheme();
   }
@@ -19,13 +21,13 @@ export class ThemeService {
   }
 
   private updateTheme(): void {
+    const themeClass = 'dark-theme';
     if (this.isDarkTheme) {
-      this.renderer.addClass(document.body, 'dark-theme');
+      this.renderer.addClass(this.document.body, themeClass);
     } else {
-      this.renderer.removeClass(document.body, 'dark-theme');
+      this.renderer.removeClass(this.document.body, themeClass);
     }
   }
-
   private saveTheme(): void {
     localStorage.setItem('theme', this.isDarkTheme ? 'dark' : 'light');
   }

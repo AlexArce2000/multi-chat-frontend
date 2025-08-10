@@ -4,12 +4,18 @@ import { LoginComponent } from './features/auth/login/login.component';
 import { RegisterComponent } from './features/auth/register/register.component';
 import { ChatLobbyComponent } from './features/chat/chat-lobby/chat-lobby.component';
 import { AuthGuard } from './core/guards/auth.guard';
+import { ChatRoomComponent } from './features/chat/chat-room/chat-room.component'; // <-- IMPORTAR
 const routes: Routes = [
     {
         path: 'chat',
         component: ChatLobbyComponent,
         canActivate: [AuthGuard] 
-    },    
+    },
+    {
+        path: 'chat/:roomId',
+        component: ChatRoomComponent,
+        canActivate: [AuthGuard]
+    },        
     {
         path: 'login', 
         component: LoginComponent 

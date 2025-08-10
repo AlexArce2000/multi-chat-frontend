@@ -1,7 +1,17 @@
-mat-toolbar .spacer {
-  flex: 1 1 auto;
+:host {
+  display: flex;
+  flex-direction: column;
+  height: 100vh; // El componente raíz ocupa el 100% de la altura de la ventana
 }
+
 mat-toolbar {
-  height: 40px; 
-  padding: 0 16px;
+  flex-shrink: 0; // Evita que la toolbar se encoja
+}
+
+.main-content {
+  flex-grow: 1; // Hace que esta área ocupe todo el espacio vertical sobrante
+  overflow-y: auto; // Añade scroll si el contenido se desborda
+}
+.spacer {
+  flex: 1 1 auto;
 }

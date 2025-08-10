@@ -1,1 +1,43 @@
-<p>chat-room works!</p>
+<!-- Contenedor Principal del Chat -->
+<div class="chat-container">
+
+  <!-- Área de mensajes (scrollable) -->
+    <div class="message-area">
+    <div *ngIf="isLoadingHistory" class="spinner-container">
+        <mat-spinner diameter="50"></mat-spinner>
+    </div>
+
+    <div *ngIf="!isLoadingHistory" class="messages-list">
+        <!-- El *ngFor ahora está en un contenedor wrapper -->
+        <ng-container *ngFor="let msg of messages">
+        <!-- 1. NUEVO CONTENEDOR 'WRAPPER' CON LA CLASE CONDICIONAL -->
+        <div class="message-wrapper" [ngClass]="{'mine': msg.remitente === currentUser}">
+            <!-- El div del mensaje ahora solo contiene el mensaje -->
+            <div class="message">
+                <span class="sender" *ngIf="msg.remitente !== currentUser">{{ msg.remitente }}</span>
+                <span class="sender mine" *ngIf="msg.remitente === currentUser">Yo: </span>
+            <span class="content">{{ msg.contenido }}</span>
+            <span class="timestamp">{{ msg.timestamp | date:'shortTime' }}</span>
+            </div>
+        </div>
+        </ng-container>
+    </div>
+    </div>
+
+  <mat-divider></mat-divider>
+
+  <!-- Área de input para enviar mensajes -->
+   <footer class="input-area-footer">
+    <div class="input-area">
+        <mat-form-field appearance="outline" class="message-input">
+        <mat-label>Escribe un mensaje...</mat-label>
+        <input matInput [formControl]="messageControl" (keyup.enter)="sendMessage()">
+        </mat-form-field>
+        <button mat-fab color="primary" (click)="sendMessage()" [disabled]="messageControl.invalid" aria-label="Enviar mensaje">
+        <mat-icon>send</mat-icon>
+        </button>
+    </div>    
+   </footer>
+
+  
+</div>

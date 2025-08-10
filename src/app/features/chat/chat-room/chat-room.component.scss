@@ -1,0 +1,178 @@
+.chat-container {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  position: relative; 
+}
+.message-wrapper {
+  display: flex; // Habilita flexbox
+  margin-bottom: 12px;
+}
+.message-area {
+    flex-grow: 1;
+    overflow-y: auto;
+    padding: 16px;
+    padding-bottom: 80px;
+    display: flex;
+    flex-direction: column-reverse; 
+}
+.messages-list {
+  display: flex;
+  flex-direction: column;
+}
+.message {
+  margin-bottom: 12px;
+  display: flex;
+  flex-direction: column;
+
+  .sender {
+    font-weight: bold;
+    font-size: 0.9em;
+    margin-bottom: 4px;
+  }
+  .content {
+    background-color: rgb(202, 202, 202);
+    padding: 10px 14px;
+    border-radius: 18px;
+    max-width: 70%;
+    word-wrap: break-word;
+  }
+  .timestamp {
+    font-size: 0.7em;
+    color: #888;
+    align-self: flex-end;
+    margin-top: 4px;
+  }
+}
+.input-area-footer {
+  position: absolute; // Lo sacamos del flujo normal
+  bottom: 0;        // Lo pegamos al fondo
+  left: 0;
+  right: 0;
+  width: 100%;
+}
+.input-area {
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    padding: 8px 16px;
+    background-color: white;
+    border-top: 1px solid rgba(0,0,0,0.12);
+
+    .message-input {
+        flex-grow: 1; 
+        margin-right: 8px;
+    }
+}
+:host-context(.dark-theme) {
+  .message.mine .content {
+    background-color: #adaeb1; // Un tono más claro del primario para el modo oscuro
+  }
+  .chat-container {
+    background-color: #303030;
+  }
+  .message .content {
+    background-color: #424242;
+    color: white;
+  }
+  .input-area {
+    background-color: #212121;
+    border-top-color: rgba(255,255,255,0.12);
+  }
+  .sender {
+    color: #9fa8da;
+  }
+  .timestamp {
+    color: #aaa;
+  }
+}
+.message.mine {
+    align-self: flex-end;
+
+  .content {
+    background-color: #999a9e; // Usamos el color primario del tema
+    color: white;
+  }
+  
+  // Ocultamos el nombre del remitente para nuestros propios mensajes
+  .sender {
+    display: none;
+  }
+}
+// NUEVO: Contenedor que alinea el mensaje
+.message-wrapper {
+  display: flex; // Habilita flexbox
+  margin-bottom: 12px;
+}
+
+// Estilos para el globo del mensaje
+.message {
+  display: flex;
+  flex-direction: column;
+  max-width: 70%; // Los mensajes no ocupan todo el ancho
+  padding: 8px 12px;
+  border-radius: 18px;
+  position: relative; // Para posicionar la marca de tiempo
+
+  .sender {
+    font-weight: bold;
+    font-size: 0.9em;
+    margin-bottom: 4px;
+    color: #3f51b5; // Color primario para el remitente
+  }
+
+  .content {
+    word-wrap: break-word; // Para que el texto largo se rompa
+    margin-bottom: 16px; // Espacio para la marca de tiempo
+  }
+  
+  .timestamp {
+    font-size: 0.7em;
+    color: #888;
+    position: absolute; // Posicionamiento absoluto
+    bottom: 5px;       // En la esquina inferior
+    right: 12px;       // derecha
+  }
+}
+
+// --- ESTILOS PARA MENSAJES DE OTROS (por defecto) ---
+.message-wrapper {
+  justify-content: flex-start; // Alinea el globo a la izquierda
+}
+.message {
+  background-color: #e0e0e0; // Un gris claro para los demás
+}
+
+// --- ESTILOS PARA MIS MENSAJES ---
+.message-wrapper.mine {
+  justify-content: flex-end; // ¡Alinea el globo a la derecha!
+}
+.message.mine {
+  background-color: #3f51b5; // Usamos el color primario del tema
+  color: white;
+
+  .timestamp {
+    color: rgba(255, 255, 255, 0.7); // Hacemos la marca de tiempo más clara
+  }
+}
+
+// --- ESTILOS PARA EL MODO OSCURO ---
+:host-context(.dark-theme) {
+  // ...
+  .message {
+    background-color: #424242;
+    color: white;
+  }
+  .message.mine {
+    background-color: #7986cb;
+  }
+  .sender {
+    color: #9fa8da;
+  }
+  .timestamp {
+    color: #aaa;
+  }
+  .message.mine .timestamp {
+    color: rgba(255, 255, 255, 0.7);
+  }
+}
