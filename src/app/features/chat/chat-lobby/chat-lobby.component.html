@@ -1,12 +1,48 @@
-<h1>¡Bienvenido al Chat!</h1>
-<p>Esta es una ruta protegida.</p>
+<div class="lobby-container">
+  <mat-card>
+    <mat-card-header>
+      <mat-card-title>Bienvenido al Lobby</mat-card-title>
+      <mat-card-subtitle>Selecciona una sala para unirte o crea una nueva.</mat-card-subtitle>
+    </mat-card-header>
+    
+    <mat-card-content>
+      <h3>Salas Públicas</h3>
+      
+      <div *ngIf="isLoading" class="spinner-container">
+        <mat-spinner diameter="50"></mat-spinner>
+      </div>
 
-<button mat-raised-button color="primary" (click)="sendMessageTest()">Enviar Mensaje de Prueba</button>
+    <mat-list *ngIf="!isLoading">
+      <mat-list-item *ngFor="let room of publicRooms">
+        
+        <!-- Icono a la izquierda -->
+        <mat-icon matListItemIcon>meeting_room</mat-icon>
+        
+        <!-- Contenedor para todo el texto -->
+        <div class="list-item-content">
+          <span matListItemTitle>{{ room.name }}</span>
+          <span matListItemLine class="creator-text">Creada por: {{ room.creator.username }}</span>
+        </div>
 
-<button mat-raised-button color="warn" (click)="logout()">Cerrar Sesión</button>
+        <span class="list-item-spacer"></span>
 
-<hr>
-<h2>Mensajes Recibidos:</h2>
-<div *ngFor="let msg of receivedMessages">
-  <p><b>{{ msg.remitente }}:</b> {{ msg.contenido }}</p>
+        <!-- Botón a la derecha -->
+        <button mat-icon-button (click)="joinRoom(room.id)">
+          <mat-icon>arrow_forward_ios</mat-icon>
+        </button>
+        
+      </mat-list-item>
+    </mat-list>
+      
+      <p *ngIf="!isLoading && publicRooms.length === 0">
+        No hay salas públicas disponibles en este momento. ¡Crea una!
+      </p>
+
+    </mat-card-content>
+
+    <mat-card-actions>
+      <button mat-raised-button color="primary">Crear Sala</button>
+      <button mat-button color="warn" (click)="logout()">Cerrar Sesión</button>
+    </mat-card-actions>
+  </mat-card>
 </div>

@@ -1,52 +1,49 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router'; // <-- IMPORTAR Router
 import { AuthService } from 'src/app/core/services/auth.service';
-import { WebSocketService } from 'src/app/core/services/websocket.service'; 
-import { Subscription } from 'rxjs'; 
+import { RoomService } from 'src/app/core/services/room.service';
+import { Room } from 'src/app/shared/models/room'; 
 
 @Component({
   selector: 'app-chat-lobby',
   templateUrl: './chat-lobby.component.html',
   styleUrls: ['./chat-lobby.component.scss']
 })
-export class ChatLobbyComponent implements OnInit, OnDestroy {
-  
-  private messageSubscription: Subscription | undefined;
-  public receivedMessages: any[] = [];
+export class ChatLobbyComponent implements OnInit { 
+  public publicRooms: Room[] = [];
+  public isLoading = true;
 
-  // Inyectamos el WebSocketService
+  // Inyectamos RoomService y Router
   constructor(
     private authService: AuthService,
-    private webSocketService: WebSocketService
+    private roomService: RoomService,
+    private router: Router
   ) {}
 
   ngOnInit(): void {
-    this.webSocketService.initAndConnect();
-
-    const testRoomId = 'ea45c6a8-f041-482a-8657-3f033da3cadf'; 
-    this.messageSubscription = this.webSocketService.watchTopic(`/topic/rooms/${testRoomId}`)
-      .subscribe((message: any) => {
-        console.log('Mensaje recibido:', message);
-        this.receivedMessages.push(message);
-      });
+    this.loadPublicRooms();
   }
 
-  ngOnDestroy(): void {
-    if (this.messageSubscription) {
-      this.messageSubscription.unsubscribe();
-    }
-    this.webSocketService.deactivate();
+  loadPublicRooms(): void {
+    this.isLoading = true;
+    this.roomService.getPublicRooms().subscribe({
+      next: (rooms) => {
+        this.publicRooms = rooms;
+        this.isLoading = false;
+        console.log('Salas públicas cargadas:', rooms);
+      },
+      error: (err) => {
+        console.error('Error al cargar las salas públicas:', err);
+        this.isLoading = false;
+      }
+    });
+  }
+
+  joinRoom(roomId: string): void {
+    this.router.navigate(['/chat', roomId]);
   }
 
   logout(): void {
     this.authService.logout();
-  }
-
-  sendMessageTest(): void {
-    const testRoomId = 'ea45c6a8-f041-482a-8657-3f033da3cadf';
-    const messagePayload = {
-      remitente: 'testuser', 
-      contenido: '¡Hola desde Angular con RxStomp!'
-    };
-    this.webSocketService.publishMessage(`/app/chat.sendMessage/${testRoomId}`, messagePayload);
   }
 }
