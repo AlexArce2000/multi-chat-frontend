@@ -8,13 +8,11 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MaterialModule } from './shared/material/material.module';
 import { JwtInterceptor } from './core/interceptors/jwt.interceptor';
 
-// ¡IMPORTA TODOS TUS COMPONENTES AQUÍ!
 import { LoginComponent } from './features/auth/login/login.component';
 import { RegisterComponent } from './features/auth/register/register.component';
 import { ChatLobbyComponent } from './features/chat/chat-lobby/chat-lobby.component';
 import { ChatRoomComponent } from './features/chat/chat-room/chat-room.component';
-import { CreateRoomComponent } from './shared/dialogs/create-room/create-room.component'; // <-- LA IMPORTACIÓN QUE FALTABA
-
+import { CreateRoomComponent } from './shared/dialogs/create-room/create-room.component';
 @NgModule({
   // ¡DECLARA TODOS TUS COMPONENTES AQUÍ!
   declarations: [

@@ -18,4 +18,8 @@ export class RoomService {
   getRoomMessages(roomId: string): Observable<ChatMessage[]> {
     return this.http.get<ChatMessage[]>(`${this.apiUrl}/${roomId}/messages`);
   }
+
+  createRoom(roomData: { name: string, isPublic: boolean, password?: string }): Observable<Room> {
+    return this.http.post<Room>(this.apiUrl, roomData);
+  } 
 }
