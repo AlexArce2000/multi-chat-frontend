@@ -16,7 +16,7 @@ import { ViewChild, ElementRef, AfterViewChecked } from '@angular/core';
   styleUrls: ['./chat-room.component.scss']
 })
 export class ChatRoomComponent implements OnInit, OnDestroy, AfterViewChecked {
-  @ViewChild('messageArea') private messageArea: ElementRef | undefined;
+  @ViewChild('messageArea') private messageArea!: ElementRef;
   roomId: string | null = null;
   messages: ChatMessage[] = [];
   messageSubscription: Subscription | undefined;
@@ -56,10 +56,9 @@ export class ChatRoomComponent implements OnInit, OnDestroy, AfterViewChecked {
   }
   scrollToBottom(): void {
     try {
-      if (this.messageArea) {
-        this.messageArea.nativeElement.scrollTop = this.messageArea.nativeElement.scrollHeight;
-      }
-    } catch(err) { }                 
+      this.messageArea.nativeElement.scrollTop = this.messageArea.nativeElement.scrollHeight;
+    } catch (err) { 
+    }
   }
   loadMessageHistory(): void {
     if (!this.roomId) return;
