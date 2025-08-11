@@ -99,17 +99,14 @@
     display: none;
   }
 }
-// NUEVO: Contenedor que alinea el mensaje
 .message-wrapper {
   display: flex; // Habilita flexbox
   margin-bottom: 12px;
 }
-
-// Estilos para el globo del mensaje
 .message {
   display: flex;
   flex-direction: column;
-  max-width: 70%; // Los mensajes no ocupan todo el ancho
+  max-width: 100%; // Los mensajes no ocupan todo el ancho
   padding: 8px 12px;
   border-radius: 18px;
   position: relative; // Para posicionar la marca de tiempo

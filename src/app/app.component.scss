@@ -1,16 +1,24 @@
 :host {
   display: flex;
   flex-direction: column;
-  height: 100vh; // El componente raíz ocupa el 100% de la altura de la ventana
+  height: 100%;
+  background-color: #fafafa;
+  transition: background-color 0.3s ease;
+}
+:host-context(.dark-theme) {
+  background-color: #303030; 
 }
 
 mat-toolbar {
-  flex-shrink: 0; // Evita que la toolbar se encoja
+  flex-shrink: 0;
+}
+mat-toolbar {
+  flex-shrink: 0;
 }
 
 .main-content {
-  flex-grow: 1; // Hace que esta área ocupe todo el espacio vertical sobrante
-  overflow-y: auto; // Añade scroll si el contenido se desborda
+  flex-grow: 1; 
+  overflow-y: auto; 
 }
 .spacer {
   flex: 1 1 auto;

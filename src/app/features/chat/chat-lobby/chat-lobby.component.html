@@ -1,7 +1,10 @@
 <div class="lobby-container">
   <mat-card>
     <mat-card-header>
-      <mat-card-title>Bienvenido al Lobby</mat-card-title>
+      <mat-card-title>
+        Bienvenido al Lobby, <span class="username-highlight">{{ currentUsername | titlecase }}
+        </span>
+        </mat-card-title>
       <mat-card-subtitle>Selecciona una sala para unirte o crea una nueva.</mat-card-subtitle>
     </mat-card-header>
     

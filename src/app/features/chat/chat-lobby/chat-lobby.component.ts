@@ -8,6 +8,7 @@ import { CreateRoomComponent } from 'src/app/shared/dialogs/create-room/create-r
 import { NotificationService } from 'src/app/core/services/notification.service';
 import { JoinRoomComponent } from 'src/app/shared/dialogs/join-room/join-room.component';
 import { JoinPrivateRoomComponent } from 'src/app/shared/dialogs/join-private-room/join-private-room.component';
+import { jwtDecode } from 'jwt-decode';
 
 @Component({
   selector: 'app-chat-lobby',
@@ -17,7 +18,8 @@ import { JoinPrivateRoomComponent } from 'src/app/shared/dialogs/join-private-ro
 export class ChatLobbyComponent implements OnInit { 
   public publicRooms: Room[] = [];
   public isLoading = true;
-
+  public currentUsername: string | null = null;
+  
   constructor(
     private authService: AuthService,
     private roomService: RoomService,
@@ -27,9 +29,18 @@ export class ChatLobbyComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    const token = this.authService.getToken();
+    if (token) {
+      try {
+        const decodedToken: any = jwtDecode(token);
+        this.currentUsername = decodedToken.sub; 
+      } catch (error) {
+        console.error('Error al decodificar el token:', error);
+        this.authService.logout();
+      }
+    }
     this.loadPublicRooms();
   }
-
   loadPublicRooms(): void {
     this.isLoading = true;
     this.roomService.getPublicRooms().subscribe({

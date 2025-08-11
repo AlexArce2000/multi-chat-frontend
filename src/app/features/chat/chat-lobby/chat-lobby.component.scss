@@ -7,6 +7,10 @@
     display: flex !important;
     width: 100% !important;
 }
+.username-highlight {
+  color: #4CAF50; 
+  font-weight: 600;
+}
 mat-card {
     width: 100%;
     max-width: 600px;
@@ -37,4 +41,9 @@ mat-icon.matListItemIcon {
     color: rgba(0, 0, 0, 0.6); 
     margin-top: -2px; 
     line-height: 1.5;  
+}
+:host-context(.dark-theme) {
+  .username-highlight {
+    color: #81C784; 
+  }
 }
