@@ -65,7 +65,17 @@ export class ChatLobbyComponent implements OnInit {
     });
   }
   joinRoom(roomId: string): void {
-    this.router.navigate(['/chat', roomId]);
+    console.log(`Intentando unirse a la sala: ${roomId}`);
+    
+    this.roomService.joinRoom(roomId).subscribe({
+      next: (response) => {
+        console.log('Unido a la sala con éxito:', response);
+        this.router.navigate(['/chat', roomId]);
+      },
+      error: (err) => {
+        console.error('Error al unirse a la sala:', err);
+      }
+    });
   }
 
   logout(): void {

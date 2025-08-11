@@ -7,15 +7,16 @@ import { AuthService } from 'src/app/core/services/auth.service';
 import { RoomService } from 'src/app/core/services/room.service';
 import { ChatMessage } from 'src/app/shared/models/chat-message';
 import { jwtDecode } from 'jwt-decode';
-
+import { NgZone } from '@angular/core'; 
+import { ViewChild, ElementRef, AfterViewChecked } from '@angular/core';
 
 @Component({
   selector: 'app-chat-room',
   templateUrl: './chat-room.component.html',
   styleUrls: ['./chat-room.component.scss']
 })
-export class ChatRoomComponent implements OnInit, OnDestroy {
-
+export class ChatRoomComponent implements OnInit, OnDestroy, AfterViewChecked {
+  @ViewChild('messageArea') private messageArea: ElementRef | undefined;
   roomId: string | null = null;
   messages: ChatMessage[] = [];
   messageSubscription: Subscription | undefined;
@@ -30,7 +31,8 @@ export class ChatRoomComponent implements OnInit, OnDestroy {
     private route: ActivatedRoute,
     private webSocketService: WebSocketService,
     private authService: AuthService, 
-    private roomService: RoomService  
+    private roomService: RoomService,
+    private zone: NgZone  
   ) { }
 
   ngOnInit(): void {
@@ -49,7 +51,16 @@ export class ChatRoomComponent implements OnInit, OnDestroy {
       this.subscribeToRoomTopic();
     }
   }
-  
+  ngAfterViewChecked() {        
+      this.scrollToBottom();        
+  }
+  scrollToBottom(): void {
+    try {
+      if (this.messageArea) {
+        this.messageArea.nativeElement.scrollTop = this.messageArea.nativeElement.scrollHeight;
+      }
+    } catch(err) { }                 
+  }
   loadMessageHistory(): void {
     if (!this.roomId) return;
     this.isLoadingHistory = true;
@@ -67,12 +78,16 @@ export class ChatRoomComponent implements OnInit, OnDestroy {
     });
   }
 
+
   subscribeToRoomTopic(): void {
     if (!this.roomId) return;
     this.messageSubscription = this.webSocketService
       .watchTopic(`/topic/rooms/${this.roomId}`)
       .subscribe((message: ChatMessage) => {
-        this.messages.push(message);
+        this.zone.run(() => {
+          this.messages.push(message);
+        });
+        // this.scrollToBottom();
       });
   }
 

@@ -22,4 +22,7 @@ export class RoomService {
   createRoom(roomData: { name: string, isPublic: boolean, password?: string }): Observable<Room> {
     return this.http.post<Room>(this.apiUrl, roomData);
   } 
+  joinRoom(roomId: string): Observable<any> {
+    return this.http.post(`${this.apiUrl}/${roomId}/join`, {}, { responseType: 'text' });
+  }
 }
