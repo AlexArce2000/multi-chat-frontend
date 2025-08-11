@@ -46,28 +46,30 @@ export class ChatLobbyComponent implements OnInit {
   }
   openCreateRoomDialog(): void {
     const dialogRef = this.dialog.open(CreateRoomComponent, {
-      width: '400px', // Ancho del diálogo
+      width: '450px', 
+      disableClose: true
     });
 
     // Nos suscribimos al resultado del diálogo
     dialogRef.afterClosed().subscribe(result => {
-      // 'result' contendrá los datos del formulario si el usuario hizo clic en "Crear"
       if (result) {
-        console.log('Datos del diálogo:', result);
-        this.roomService.createRoom(result).subscribe({
-          next: (newRoom) => {
-            console.log('Sala creada con éxito:', newRoom);
-            // Refrescamos la lista de salas para que aparezca la nueva
-            this.loadPublicRooms(); 
-          },
-          error: (err) => {
-            console.error('Error al crear la sala:', err);
-            // Aquí mostrarías un snackbar de error
-          }
-        });
+        this.createRoom(result);
       }
     });
   }
+  createRoom(roomData: any): void {
+    this.roomService.createRoom(roomData).subscribe({
+      next: (newRoom) => {
+        this.notificationService.showSuccess(`¡Sala "${newRoom.name}" creada con éxito!`);
+        // Refrescamos la lista para que la nueva sala aparezca si es pública
+        this.loadPublicRooms();
+      },
+      error: (err) => {
+        this.notificationService.showError('Error al crear la sala.');
+      }
+    });
+  }
+
   joinRoom(roomId: string): void {
     console.log(`Intentando unirse a la sala: ${roomId}`);
     
