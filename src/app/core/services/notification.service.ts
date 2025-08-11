@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
+
 @Injectable({
   providedIn: 'root'
 })
@@ -35,5 +36,12 @@ export class NotificationService {
       onAction();
     });
   }
- 
+  copyToClipboard(text: string, confirmationMessage: string): void {
+    navigator.clipboard.writeText(text).then(() => {
+      this.showSuccess(confirmationMessage);
+    }).catch(err => {
+      console.error('Error al copiar al portapapeles', err);
+      this.showError('No se pudo copiar el texto.');
+    });
+  } 
 }

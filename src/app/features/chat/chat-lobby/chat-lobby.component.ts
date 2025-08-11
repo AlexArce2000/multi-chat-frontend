@@ -59,8 +59,28 @@ export class ChatLobbyComponent implements OnInit {
   }
   createRoom(roomData: any): void {
     this.roomService.createRoom(roomData).subscribe({
-      next: (newRoom: Room) => { // Tipamos la respuesta como Room
-        this.notificationService.showSuccess(`¡Sala "${newRoom.name}" creada con éxito!`);
+      next: (newRoom: Room) => {
+        
+        // --- ¡LA LÓGICA CLAVE! ---
+        if (newRoom.public) {
+          // Si es pública, mostramos una notificación simple y refrescamos la lista
+          this.notificationService.showSuccess(`¡Sala pública "${newRoom.name}" creada!`);
+          this.loadPublicRooms();
+        } else {
+          // Si es PRIVADA, mostramos la notificación con la acción de copiar
+          this.notificationService.showSuccessWithAction(
+            `Sala privada "${newRoom.name}" creada`, // Mensaje
+            'Copiar ID',                            // Texto del botón
+            () => {                                   // Función a ejecutar al hacer clic
+              this.notificationService.copyToClipboard(
+                newRoom.id,
+                '¡ID de la sala copiado al portapapeles!'
+              );
+            }
+          );
+        }
+        
+        // En ambos casos, navegamos a la nueva sala
         this.router.navigate(['/chat', newRoom.id]);
       },
       error: (err) => {

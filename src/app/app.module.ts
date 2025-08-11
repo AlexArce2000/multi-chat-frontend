@@ -15,7 +15,6 @@ import { ChatRoomComponent } from './features/chat/chat-room/chat-room.component
 import { CreateRoomComponent } from './shared/dialogs/create-room/create-room.component';
 import { JoinRoomComponent } from './shared/dialogs/join-room/join-room.component';
 import { JoinPrivateRoomComponent } from './shared/dialogs/join-private-room/join-private-room.component';
-
 @NgModule({
   // ¡DECLARA TODOS TUS COMPONENTES AQUÍ!
   declarations: [
