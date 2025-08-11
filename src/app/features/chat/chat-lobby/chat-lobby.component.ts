@@ -6,6 +6,8 @@ import { Room } from 'src/app/shared/models/room';
 import { MatDialog } from '@angular/material/dialog'; 
 import { CreateRoomComponent } from 'src/app/shared/dialogs/create-room/create-room.component'; 
 import { NotificationService } from 'src/app/core/services/notification.service';
+import { JoinRoomComponent } from 'src/app/shared/dialogs/join-room/join-room.component';
+import { JoinPrivateRoomComponent } from 'src/app/shared/dialogs/join-private-room/join-private-room.component';
 
 @Component({
   selector: 'app-chat-lobby',
@@ -16,7 +18,6 @@ export class ChatLobbyComponent implements OnInit {
   public publicRooms: Room[] = [];
   public isLoading = true;
 
-  // Inyectamos RoomService y Router
   constructor(
     private authService: AuthService,
     private roomService: RoomService,
@@ -33,14 +34,13 @@ export class ChatLobbyComponent implements OnInit {
     this.isLoading = true;
     this.roomService.getPublicRooms().subscribe({
       next: (rooms) => {
+        console.log('Datos de salas recibidos del backend:', rooms);
+        
         this.publicRooms = rooms;
         this.isLoading = false;
-        console.log('Salas públicas cargadas:', rooms);
       },
       error: (err) => {
-        this.notificationService.showError('No se pudieron cargar las salas.');
-        console.error('Error al cargar las salas públicas:', err);
-        this.isLoading = false;
+        // ...
       }
     });
   }
@@ -59,10 +59,9 @@ export class ChatLobbyComponent implements OnInit {
   }
   createRoom(roomData: any): void {
     this.roomService.createRoom(roomData).subscribe({
-      next: (newRoom) => {
+      next: (newRoom: Room) => { // Tipamos la respuesta como Room
         this.notificationService.showSuccess(`¡Sala "${newRoom.name}" creada con éxito!`);
-        // Refrescamos la lista para que la nueva sala aparezca si es pública
-        this.loadPublicRooms();
+        this.router.navigate(['/chat', newRoom.id]);
       },
       error: (err) => {
         this.notificationService.showError('Error al crear la sala.');
@@ -83,7 +82,57 @@ export class ChatLobbyComponent implements OnInit {
       }
     });
   }
+  handleRoomClick(room: Room): void {
+    if (room.public) {
+      this.roomService.joinRoom(room.id).subscribe({
+        next: () => {
+          this.router.navigate(['/chat', room.id]);
+        },
+        error: (err) => {
+          this.notificationService.showError('No se pudo unir a la sala pública.');
+        }
+      });
+    } else {
+      const dialogRef = this.dialog.open(JoinRoomComponent, {
+        width: '400px',
+        data: { roomName: room.name } // Pasamos datos al diálogo
+      });
 
+      dialogRef.afterClosed().subscribe(password => {
+        if (password) {
+          this.roomService.joinRoom(room.id, password).subscribe({
+            next: () => {
+              this.router.navigate(['/chat', room.id]);
+            },
+            error: (err) => {
+              this.notificationService.showError(err.error || 'Contraseña incorrecta o error al unirse.');
+            }
+          });
+        }
+      });
+    }
+  }
+
+  openJoinPrivateRoomDialog(): void {
+    const dialogRef = this.dialog.open(JoinPrivateRoomComponent, {
+      width: '400px',
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      // 'result' será un objeto { roomId: '...', password: '...' }
+      if (result && result.roomId && result.password) {
+        this.roomService.joinRoom(result.roomId, result.password).subscribe({
+          next: () => {
+            this.notificationService.showSuccess('Te has unido a la sala privada.');
+            this.router.navigate(['/chat', result.roomId]);
+          },
+          error: (err) => {
+            this.notificationService.showError(err.error || 'No se pudo unir. Verifica el ID y la contraseña.');
+          }
+        });
+      }
+    });
+  }  
   logout(): void {
     this.authService.logout();
   }

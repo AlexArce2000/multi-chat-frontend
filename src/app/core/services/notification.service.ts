@@ -1,12 +1,12 @@
 import { Injectable } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
-
 @Injectable({
   providedIn: 'root'
 })
 export class NotificationService {
 
-  constructor(private snackBar: MatSnackBar) { }
+  constructor(private snackBar: MatSnackBar,
+  ) { }
 
   /**
    * Muestra una notificación de éxito (verde).
@@ -25,4 +25,15 @@ export class NotificationService {
       panelClass: ['snackbar-error'] 
     });
   }
+  showSuccessWithAction(message: string, actionText: string, onAction: () => void): void {
+    const snackBarRef = this.snackBar.open(message, actionText, {
+      duration: 10000,
+      panelClass: ['snackbar-success']
+    });
+
+    snackBarRef.onAction().subscribe(() => {
+      onAction();
+    });
+  }
+ 
 }

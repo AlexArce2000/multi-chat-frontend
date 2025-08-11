@@ -8,12 +8,14 @@
     <mat-card-content>
       <h3>Salas Públicas</h3>
       
+      <!-- Spinner de carga -->
       <div *ngIf="isLoading" class="spinner-container">
         <mat-spinner diameter="50"></mat-spinner>
       </div>
 
+      <!-- ÚNICO BLOQUE PARA MOSTRAR LA LISTA -->
     <mat-list *ngIf="!isLoading">
-      <mat-list-item *ngFor="let room of publicRooms">
+      <mat-list-item *ngFor="let room of publicRooms" (click)="handleRoomClick(room)" class="room-item">
         
         <!-- Icono a la izquierda -->
         <mat-icon matListItemIcon>meeting_room</mat-icon>
@@ -34,6 +36,7 @@
       </mat-list-item>
     </mat-list>
       
+      <!-- Mensaje para cuando no hay salas -->
       <p *ngIf="!isLoading && publicRooms.length === 0">
         No hay salas públicas disponibles en este momento. ¡Crea una!
       </p>
@@ -42,6 +45,12 @@
 
   <mat-card-actions>
     <button mat-raised-button color="primary" (click)="openCreateRoomDialog()">Crear Sala</button>
+    
+    <!-- ¡NUEVO BOTÓN! -->
+    <button mat-stroked-button color="primary" (click)="openJoinPrivateRoomDialog()">Unirse a Privada</button>
+
+    <span class="lobby-spacer"></span> <!-- Un espaciador para empujar el logout a la derecha -->
+    
     <button mat-button color="warn" (click)="logout()">Cerrar Sesión</button>
   </mat-card-actions>
   </mat-card>

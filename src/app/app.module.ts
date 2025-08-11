@@ -13,6 +13,9 @@ import { RegisterComponent } from './features/auth/register/register.component';
 import { ChatLobbyComponent } from './features/chat/chat-lobby/chat-lobby.component';
 import { ChatRoomComponent } from './features/chat/chat-room/chat-room.component';
 import { CreateRoomComponent } from './shared/dialogs/create-room/create-room.component';
+import { JoinRoomComponent } from './shared/dialogs/join-room/join-room.component';
+import { JoinPrivateRoomComponent } from './shared/dialogs/join-private-room/join-private-room.component';
+
 @NgModule({
   // ¡DECLARA TODOS TUS COMPONENTES AQUÍ!
   declarations: [
@@ -21,7 +24,9 @@ import { CreateRoomComponent } from './shared/dialogs/create-room/create-room.co
     RegisterComponent,
     ChatLobbyComponent,
     ChatRoomComponent,
-    CreateRoomComponent // <-- LA DECLARACIÓN QUE FALTABA
+    CreateRoomComponent,
+    JoinRoomComponent,
+    JoinPrivateRoomComponent
   ],
   imports: [
     BrowserModule,
@@ -30,7 +35,7 @@ import { CreateRoomComponent } from './shared/dialogs/create-room/create-room.co
     ReactiveFormsModule,
     HttpClientModule,
     BrowserAnimationsModule,
-    MaterialModule // <-- Al importar esto, tenemos acceso a todos los componentes de Material
+    MaterialModule
   ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true }

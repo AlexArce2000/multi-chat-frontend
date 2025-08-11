@@ -1,0 +1,22 @@
+<h2 mat-dialog-title>Unirse a Sala Privada</h2>
+
+<mat-dialog-content>
+  <form [formGroup]="joinForm" class="join-private-room-form">
+    <mat-form-field appearance="outline">
+      <mat-label>ID de la Sala</mat-label>
+      <input matInput formControlName="roomId" required>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Contraseña de la Sala</mat-label>
+      <input matInput formControlName="password" type="password" required>
+    </mat-form-field>
+  </form>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-button (click)="onCancel()">Cancelar</button>
+  <button mat-raised-button color="primary" [disabled]="joinForm.invalid" (click)="onSubmit()">
+    Unirse
+  </button>
+</mat-dialog-actions>
