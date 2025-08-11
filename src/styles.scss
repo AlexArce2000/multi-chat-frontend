@@ -34,3 +34,13 @@ body {
   margin: 0; 
   font-family: Roboto, "Helvetica Neue", sans-serif; 
 }
+
+.snackbar-success {
+  background-color: #4CAF50; // Un verde agradable
+  color: white;
+}
+
+.snackbar-error {
+  background-color: #F44336; // Un rojo claro
+  color: white;
+}

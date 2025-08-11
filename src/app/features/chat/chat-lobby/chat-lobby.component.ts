@@ -5,6 +5,8 @@ import { RoomService } from 'src/app/core/services/room.service';
 import { Room } from 'src/app/shared/models/room'; 
 import { MatDialog } from '@angular/material/dialog'; 
 import { CreateRoomComponent } from 'src/app/shared/dialogs/create-room/create-room.component'; 
+import { NotificationService } from 'src/app/core/services/notification.service';
+
 @Component({
   selector: 'app-chat-lobby',
   templateUrl: './chat-lobby.component.html',
@@ -19,7 +21,8 @@ export class ChatLobbyComponent implements OnInit {
     private authService: AuthService,
     private roomService: RoomService,
     private router: Router,
-    public dialog: MatDialog
+    public dialog: MatDialog,
+    private notificationService: NotificationService
   ) {}
 
   ngOnInit(): void {
@@ -35,6 +38,7 @@ export class ChatLobbyComponent implements OnInit {
         console.log('Salas públicas cargadas:', rooms);
       },
       error: (err) => {
+        this.notificationService.showError('No se pudieron cargar las salas.');
         console.error('Error al cargar las salas públicas:', err);
         this.isLoading = false;
       }

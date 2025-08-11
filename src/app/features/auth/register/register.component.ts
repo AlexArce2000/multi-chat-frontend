@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, AbstractControl } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AuthService } from 'src/app/core/services/auth.service';
+import { NotificationService } from 'src/app/core/services/notification.service';
 
 @Component({
   selector: 'app-register',
@@ -16,6 +17,7 @@ export class RegisterComponent implements OnInit {
   constructor(
     private fb: FormBuilder,
     private authService: AuthService,
+    private notificationService: NotificationService,
     private router: Router
   ) { }
 
@@ -46,13 +48,11 @@ export class RegisterComponent implements OnInit {
 
     this.authService.register(this.registerForm.value).subscribe({
       next: (response) => {
-        console.log('Registro exitoso:', response);
+        this.notificationService.showSuccess('¡Registro completado! Ahora puedes iniciar sesión.');
         this.router.navigate(['/login']);
       },
       error: (err) => {
-        console.error('Error en el registro:', err);
-        if (err.error) {
-        }
+        this.notificationService.showError(err.error); 
       }
     });
   }
